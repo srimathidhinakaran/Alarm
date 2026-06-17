@@ -45,6 +45,59 @@ const PUZZLES = [
       { label: "🚢", isCorrect: true  }, { label: "📚", isCorrect: false },
     ],
   },
+  // New advanced puzzles
+  {
+    id: 21, type: "grid_tap",
+    question: "Select all the citrus fruits!",
+    items: [
+      { label: "🍎", isCorrect: false }, { label: "🍋", isCorrect: true }, { label: "🍊", isCorrect: true }, { label: "🍌", isCorrect: false },
+      { label: "🍐", isCorrect: false }, { label: "🍊", isCorrect: true }, { label: "🍓", isCorrect: false }, { label: "🍋", isCorrect: true },
+      { label: "🍇", isCorrect: false }, { label: "🍈", isCorrect: false }, { label: "🍊", isCorrect: true }, { label: "🍒", isCorrect: false },
+      { label: "🍋", isCorrect: true }, { label: "🍍", isCorrect: false }, { label: "🥭", isCorrect: false }, { label: "🍊", isCorrect: true },
+    ],
+  },
+  {
+    id: 22, type: "shadow_match",
+    question: "Match the shadow to the object",
+    shadow: "🔔 (silhouette)",
+    options: [ { label: "🔔" }, { label: "📦" }, { label: "🍎" }, { label: "🚗" } ],
+    answer: "🔔",
+  },
+  {
+    id: 23, type: "fill_missing",
+    question: "Complete the pattern",
+    sequence: ["🔴", "🟢", null],
+    options: ["🔴","🟢","🔵"],
+    answer: "🔴",
+  },
+  {
+    id: 24, type: "color_mixer",
+    question: "Match the target color",
+    target: "#f9ca24",
+    tolerance: 70,
+  },
+  {
+    id: 25, type: "emoji_mashup",
+    question: "What word do these emojis represent?",
+    emojis: ["🐒","🍌","🌴"],
+    answer: "monkey",
+  },
+  {
+    id: 26, type: "memory_flip",
+    question: "Watch the sequence and repeat it",
+    sequence: [0,1,4,7],
+  },
+  {
+    id: 27, type: "sliding_tile",
+    question: "Reorder the tiles to solve",
+    board: [1,2,3,4,5,6,0,7,8],
+  },
+  {
+    id: 28, type: "line_draw",
+    question: "Connect the dots in order",
+    dots: [{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1}],
+    answerSequence: [0,1,2,5,4,3],
+  },
 ];
 
 export function getRandomPuzzle() {

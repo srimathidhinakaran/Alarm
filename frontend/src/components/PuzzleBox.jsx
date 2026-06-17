@@ -1,5 +1,6 @@
 import { useState } from "react";
 import checkAnswer from "../utils/checkAnswer";
+import { getRenderer } from "./puzzles/AdvancedPuzzles";
 
 export default function PuzzleBox({ puzzle, onCorrect }) {
   const [mathInput,    setMathInput]    = useState("");
@@ -7,6 +8,7 @@ export default function PuzzleBox({ puzzle, onCorrect }) {
   const [selectedImgs, setSelectedImgs] = useState([]);
   const [message,      setMessage]      = useState("");
   const [shake,        setShake]        = useState(false);
+  const [advancedAnswer, setAdvancedAnswer] = useState(null);
 
   function toggleImg(i) {
     setSelectedImgs(prev =>
@@ -15,7 +17,10 @@ export default function PuzzleBox({ puzzle, onCorrect }) {
   }
 
   function submit() {
-    const correct = checkAnswer(puzzle, mathInput || selectedOpt, selectedImgs);
+    const userAns = mathInput || selectedOpt || null;
+    const usesAdvanced = Boolean(getRenderer(puzzle.type));
+    const userSelected = usesAdvanced ? (advancedAnswer || []) : selectedImgs;
+    const correct = checkAnswer(puzzle, userAns, userSelected);
     if (correct) {
       setMessage("✅ Correct! Turning off alarm...");
       setTimeout(onCorrect, 1000);
@@ -62,6 +67,14 @@ export default function PuzzleBox({ puzzle, onCorrect }) {
             </button>
           ))}
         </div>
+      )}
+
+      {/* Advanced modular puzzles */}
+      {getRenderer(puzzle.type) && (
+        (() => {
+          const Renderer = getRenderer(puzzle.type);
+          return <Renderer puzzle={puzzle} onChange={setAdvancedAnswer} />;
+        })()
       )}
 
       <button onClick={submit} style={styles.submitBtn}>Submit Answer</button>
