@@ -1,0 +1,160 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #f9ca24;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+input[type="time"] {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  background: #fff;
+  color: #333;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #f9ca24;
+  color: #1a1a2e;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #f0a500;
+}
+
+#alarm-status {
+  margin-top: 15px;
+  color: #6bcb77;
+  font-size: 0.95rem;
+}
+
+/* Alarm Screen */
+.hidden {
+  display: none;
+}
+
+#alarm-screen {
+  animation: fadeIn 0.5s ease;
+}
+
+.ring-animation {
+  font-size: 5rem;
+  animation: ring 0.5s infinite alternate;
+}
+
+@keyframes ring {
+  from { transform: rotate(-15deg); }
+  to   { transform: rotate(15deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#puzzle-container {
+  margin-top: 20px;
+}
+
+#puzzle-container h3 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #f9ca24;
+}
+
+#puzzle-container input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  width: 80%;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.option-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 5px;
+  width: auto;
+  padding: 10px 20px;
+}
+
+.option-btn:hover,
+.option-btn.selected {
+  background: #f9ca24;
+  color: #1a1a2e;
+  border-color: #f9ca24;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.image-card {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.image-card.selected {
+  border-color: #f9ca24;
+  background: rgba(249, 202, 36, 0.2);
+}
+
+#result-message {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
