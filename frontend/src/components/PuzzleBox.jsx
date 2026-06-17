@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkAnswer from "../utils/checkAnswer";
 import { getRenderer } from "./puzzles/AdvancedPuzzles";
 
@@ -10,6 +10,15 @@ export default function PuzzleBox({ puzzle, onCorrect }) {
   const [shake,        setShake]        = useState(false);
   const [advancedAnswer, setAdvancedAnswer] = useState(null);
 
+  useEffect(() => {
+    setMathInput("");
+    setSelectedOpt(null);
+    setSelectedImgs([]);
+    setAdvancedAnswer(null);
+    setMessage("");
+    setShake(false);
+  }, [puzzle.id]);
+
   function toggleImg(i) {
     setSelectedImgs(prev =>
       prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i]
@@ -17,10 +26,14 @@ export default function PuzzleBox({ puzzle, onCorrect }) {
   }
 
   function submit() {
-    const userAns = mathInput || selectedOpt || null;
-    const usesAdvanced = Boolean(getRenderer(puzzle.type));
-    const userSelected = usesAdvanced ? (advancedAnswer || []) : selectedImgs;
-    const correct = checkAnswer(puzzle, userAns, userSelected);
+    const typedAnswer = mathInput || selectedOpt || null;
+    const advancedAnswerValue = advancedAnswer;
+    const useTyped = puzzle.type === "math" || puzzle.type === "odd_one_out";
+    const useSelectedImgs = puzzle.type === "image_click";
+    const answer = useTyped ? typedAnswer : advancedAnswerValue;
+    const selected = useSelectedImgs ? selectedImgs : advancedAnswerValue;
+
+    const correct = checkAnswer(puzzle, answer, selected);
     if (correct) {
       setMessage("✅ Correct! Turning off alarm...");
       setTimeout(onCorrect, 1000);
