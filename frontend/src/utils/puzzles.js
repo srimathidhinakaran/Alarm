@@ -71,10 +71,9 @@ const PUZZLES = [
     answer: "🔴",
   },
   {
-    id: 24, type: "color_mixer",
-    question: "Match the target color",
-    target: "#f9ca24",
-    tolerance: 70,
+    id: 24, type: "math",
+    question: "14 + 9 = ?",
+    answer: "23",
   },
   {
     id: 25, type: "emoji_mashup",
@@ -92,14 +91,202 @@ const PUZZLES = [
     question: "Reorder the tiles to solve",
     board: [1,2,3,4,5,6,0,7,8],
   },
-  {
-    id: 28, type: "line_draw",
-    question: "Connect the dots in order",
-    dots: [{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:0,y:1},{x:1,y:1},{x:2,y:1}],
-    answerSequence: [0,1,2,5,4,3],
-  },
 ];
 
+let dynamicIdCounter = 1000;
+
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function makeMathPuzzle() {
+  const ops = ["+", "-", "×"];
+  const op = ops[randInt(0, ops.length - 1)];
+  let a = randInt(5, 20);
+  let b = randInt(2, 15);
+  let answer;
+  let question;
+
+  if (op === "+") {
+    answer = a + b;
+    question = `${a} + ${b} = ?`;
+  } else if (op === "-") {
+    if (a < b) [a, b] = [b, a];
+    answer = a - b;
+    question = `${a} - ${b} = ?`;
+  } else {
+    answer = a * b;
+    question = `${a} × ${b} = ?`;
+  }
+
+  return {
+    id: `dyn-math-${dynamicIdCounter++}`,
+    type: "math",
+    question,
+    answer: String(answer),
+  };
+}
+
+function makeOddOneOutPuzzle() {
+  const sets = [
+    { options: ["Apple", "Banana", "Carrot", "Orange"], answer: "Carrot" },
+    { options: ["Dog", "Lion", "Eagle", "Cat"], answer: "Eagle" },
+    { options: ["Guitar", "Drums", "Piano", "Mic"], answer: "Mic" },
+    { options: ["Mercury", "Venus", "Earth", "Sun"], answer: "Sun" },
+  ];
+  const choice = sets[randInt(0, sets.length - 1)];
+  return {
+    id: `dyn-odd-${dynamicIdCounter++}`,
+    type: "odd_one_out",
+    question: "Which is the odd one out?",
+    options: shuffle(choice.options),
+    answer: choice.answer,
+  };
+}
+
+function makeImageClickPuzzle() {
+  const themes = [
+    {
+      question: "Tap all the 🐶 dogs",
+      options: [
+        { label: "🐶", isCorrect: true }, { label: "🐱", isCorrect: false },
+        { label: "🐶", isCorrect: true }, { label: "🐦", isCorrect: false },
+        { label: "🐶", isCorrect: true }, { label: "🐷", isCorrect: false },
+      ],
+    },
+    {
+      question: "Tap all the 🍕 foods",
+      options: [
+        { label: "🍕", isCorrect: true }, { label: "🍎", isCorrect: false },
+        { label: "🍔", isCorrect: true }, { label: "🌵", isCorrect: false },
+        { label: "🍟", isCorrect: true }, { label: "🚗", isCorrect: false },
+      ],
+    },
+  ];
+  const choice = themes[randInt(0, themes.length - 1)];
+  return {
+    id: `dyn-img-${dynamicIdCounter++}`,
+    type: "image_click",
+    question: choice.question,
+    images: shuffle(choice.options),
+  };
+}
+
+function makeGridTapPuzzle() {
+  const themes = [
+    {
+      question: "Select all the even numbers",
+      items: [
+        { label: "1", isCorrect: false }, { label: "2", isCorrect: true },
+        { label: "3", isCorrect: false }, { label: "4", isCorrect: true },
+        { label: "5", isCorrect: false }, { label: "6", isCorrect: true },
+        { label: "7", isCorrect: false }, { label: "8", isCorrect: true },
+        { label: "9", isCorrect: false }, { label: "10", isCorrect: true },
+        { label: "11", isCorrect: false }, { label: "12", isCorrect: true },
+        { label: "13", isCorrect: false }, { label: "14", isCorrect: true },
+        { label: "15", isCorrect: false }, { label: "16", isCorrect: true },
+      ],
+    },
+    {
+      question: "Tap all the blue items",
+      items: [
+        { label: "🔵", isCorrect: true }, { label: "🔴", isCorrect: false },
+        { label: "🟢", isCorrect: false }, { label: "⚫", isCorrect: false },
+        { label: "🔵", isCorrect: true }, { label: "🟣", isCorrect: false },
+        { label: "🔵", isCorrect: true }, { label: "🟡", isCorrect: false },
+        { label: "🔵", isCorrect: true }, { label: "🟥", isCorrect: false },
+        { label: "🟦", isCorrect: true }, { label: "🟩", isCorrect: false },
+        { label: "🔵", isCorrect: true }, { label: "🔶", isCorrect: false },
+        { label: "🔵", isCorrect: true }, { label: "⚪", isCorrect: false },
+      ],
+    },
+  ];
+  const choice = themes[randInt(0, themes.length - 1)];
+  return {
+    id: `dyn-grid-${dynamicIdCounter++}`,
+    type: "grid_tap",
+    question: choice.question,
+    items: shuffle(choice.items),
+  };
+}
+
+function makeFillMissingPuzzle() {
+  const sets = [
+    {
+      sequence: ["⬛", "⬜", "⬛", null],
+      options: ["⬛", "⬜", "🟦"],
+      answer: "⬜",
+    },
+    {
+      sequence: ["🍎", "🍌", "🍎", null],
+      options: ["🍎", "🍌", "🍓"],
+      answer: "🍌",
+    },
+    {
+      sequence: ["★", "☆", "★", null],
+      options: ["★", "☆", "⭐"],
+      answer: "☆",
+    },
+  ];
+  const choice = sets[randInt(0, sets.length - 1)];
+  return {
+    id: `dyn-fill-${dynamicIdCounter++}`,
+    type: "fill_missing",
+    question: "Complete the pattern",
+    sequence: choice.sequence,
+    options: choice.options,
+    answer: choice.answer,
+  };
+}
+
+function makeShadowMatchPuzzle() {
+  const sets = [
+    {
+      shadow: "🍎 (silhouette)",
+      options: [
+        { label: "🍎" }, { label: "🍌" }, { label: "🍇" }, { label: "🥕" },
+      ],
+      answer: "🍎",
+    },
+    {
+      shadow: "🚗 (silhouette)",
+      options: [
+        { label: "🚌" }, { label: "🚗" }, { label: "🚲" }, { label: "✈️" },
+      ],
+      answer: "🚗",
+    },
+  ];
+  const choice = sets[randInt(0, sets.length - 1)];
+  return {
+    id: `dyn-shadow-${dynamicIdCounter++}`,
+    type: "shadow_match",
+    question: "Match the shadow to the object",
+    shadow: choice.shadow,
+    options: choice.options,
+    answer: choice.answer,
+  };
+}
+
 export function getRandomPuzzle() {
+  if (Math.random() < 0.5) {
+    const builders = [
+      makeMathPuzzle,
+      makeOddOneOutPuzzle,
+      makeImageClickPuzzle,
+      makeGridTapPuzzle,
+      makeFillMissingPuzzle,
+      makeShadowMatchPuzzle,
+    ];
+    return builders[randInt(0, builders.length - 1)]();
+  }
   return PUZZLES[Math.floor(Math.random() * PUZZLES.length)];
 }
